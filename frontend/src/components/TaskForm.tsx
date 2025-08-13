@@ -1,119 +1,144 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CreateTaskSchema, TaskFormData } from '../types/task';
+import { CreateTaskInput, CreateTaskSchema } from '../types/task';
 import { useCreateTask } from '../hooks/useTasks';
 import styles from '../styles/TaskForm.module.css';
 
 /**
  * TaskForm Component
- * Reusable form component for creating new tasks
- * Uses React Hook Form with Zod validation for type safety
+ * 
+ * A form component for creating new tasks with enhanced validation.
+ * Uses React Hook Form with Zod schema validation for type safety.
+ * 
+ * Features:
+ * - Enhanced form validation with detailed error messages
+ * - Loading state during submission
+ * - Automatic form reset after successful submission
+ * - Improved UX with better visual feedback
  */
-
-interface TaskFormProps {
-  onSuccess?: () => void;
-}
-
-export const TaskForm: React.FC<TaskFormProps> = ({ onSuccess }) => {
+export const TaskForm: React.FC = () => {
   const createTaskMutation = useCreateTask();
 
-  // Setup React Hook Form with Zod validation
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
-  } = useForm<TaskFormData>({
+    watch,
+    formState: { errors, isSubmitting, isValid }
+  } = useForm<CreateTaskInput>({
     resolver: zodResolver(CreateTaskSchema),
     defaultValues: {
       title: '',
       description: '',
-      status: 'pending',
+      status: 'pending'
     },
+    mode: 'onChange' // Enable real-time validation
   });
+
+  // Watch form values for character counting
+  const titleValue = watch('title');
+  const descriptionValue = watch('description');
 
   /**
    * Handle form submission
-   * Creates new task and resets form on success
+   * Creates a new task and resets the form on success
    */
-  const onSubmit = async (data: TaskFormData) => {
+  const onSubmit = async (data: CreateTaskInput) => {
     try {
       await createTaskMutation.mutateAsync(data);
-      reset(); // Clear form after successful submission
-      onSuccess?.(); // Call optional success callback
+      reset(); // Reset form after successful submission
     } catch (error) {
-      // Error is handled by the mutation hook and stored in global state
+      // Error handling is managed by the mutation hook and global error state
       console.error('Failed to create task:', error);
     }
   };
 
   return (
-    <div className={styles.formContainer}>
-      <h2 className={styles.formTitle}>Add New Task</h2>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h2 className={styles.title}>✨ Add New Task</h2>
+        <p className={styles.subtitle}>Create a new task to stay organized</p>
+      </div>
       
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-        {/* Title Input */}
-        <div className={styles.inputGroup}>
+        <div className={styles.fieldGroup}>
           <label htmlFor="title" className={styles.label}>
-            Title *
+            📝 Title *
           </label>
           <input
             id="title"
             type="text"
             {...register('title')}
             className={`${styles.input} ${errors.title ? styles.inputError : ''}`}
-            placeholder="Enter task title"
+            placeholder="Enter a clear and concise task title..."
+            maxLength={100}
           />
-          {errors.title && (
-            <span className={styles.errorMessage}>{errors.title.message}</span>
-          )}
+          <div className={styles.fieldFooter}>
+            {errors.title && (
+              <span className={styles.error}>⚠️ {errors.title.message}</span>
+            )}
+            <span className={styles.charCount}>
+              {titleValue?.length || 0}/100
+            </span>
+          </div>
         </div>
 
-        {/* Description Input */}
-        <div className={styles.inputGroup}>
+        <div className={styles.fieldGroup}>
           <label htmlFor="description" className={styles.label}>
-            Description *
+            📄 Description *
           </label>
           <textarea
             id="description"
             {...register('description')}
             className={`${styles.textarea} ${errors.description ? styles.inputError : ''}`}
-            placeholder="Enter task description"
-            rows={3}
+            placeholder="Describe what needs to be done, include any important details..."
+            rows={4}
+            maxLength={500}
           />
-          {errors.description && (
-            <span className={styles.errorMessage}>{errors.description.message}</span>
-          )}
+          <div className={styles.fieldFooter}>
+            {errors.description && (
+              <span className={styles.error}>⚠️ {errors.description.message}</span>
+            )}
+            <span className={styles.charCount}>
+              {descriptionValue?.length || 0}/500
+            </span>
+          </div>
         </div>
 
-        {/* Status Select */}
-        <div className={styles.inputGroup}>
+        <div className={styles.fieldGroup}>
           <label htmlFor="status" className={styles.label}>
-            Status
+            🏷️ Initial Status
           </label>
           <select
             id="status"
             {...register('status')}
             className={styles.select}
           >
-            <option value="pending">Pending</option>
-            <option value="done">Done</option>
+            <option value="pending">⏳ Pending</option>
+            <option value="done">✅ Done</option>
           </select>
-          {errors.status && (
-            <span className={styles.errorMessage}>{errors.status.message}</span>
-          )}
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
-          disabled={isSubmitting || createTaskMutation.isPending}
+          disabled={isSubmitting || createTaskMutation.isPending || !isValid}
           className={`${styles.submitButton} ${
-            isSubmitting || createTaskMutation.isPending ? styles.buttonDisabled : ''
+            isSubmitting || createTaskMutation.isPending || !isValid 
+              ? styles.submitButtonDisabled 
+              : ''
           }`}
         >
-          {isSubmitting || createTaskMutation.isPending ? 'Creating...' : 'Create Task'}
+          {isSubmitting || createTaskMutation.isPending ? (
+            <>
+              <span className={styles.spinner}></span>
+              Creating Task...
+            </>
+          ) : (
+            <>
+              🚀 Create Task
+            </>
+          )}
         </button>
       </form>
     </div>

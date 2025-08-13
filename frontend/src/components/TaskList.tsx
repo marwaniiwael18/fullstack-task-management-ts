@@ -14,7 +14,7 @@ interface TaskListProps {
   isLoading?: boolean;
 }
 
-export const TaskList: React.FC<TaskListProps> = ({ tasks, isLoading }) => {
+export const TaskList: React.FC<TaskListProps> = ({ tasks = [], isLoading }) => {
   const deleteTaskMutation = useDeleteTask();
   const updateTaskMutation = useUpdateTaskStatus();
 

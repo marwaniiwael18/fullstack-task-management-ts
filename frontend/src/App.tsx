@@ -5,8 +5,8 @@ import { TaskList } from './components/TaskList';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ErrorNotification } from './components/ErrorNotification';
 import { useTasks } from './hooks/useTasks';
-import { Task } from './types/task';
-import './styles/App.css';
+
+import styles from './styles/App.module.css';
 
 /**
  * Create QueryClient instance for TanStack Query
@@ -35,32 +35,64 @@ const queryClient = new QueryClient({
  */
 const AppContent: React.FC = () => {
   // Use custom hook to fetch tasks with React Query
-  const { data: tasks = [], isLoading, error } = useTasks();
+  const { data: tasks = [] } = useTasks();
 
   return (
-    <div className="app">
-      {/* Header */}
-      <header className="app-header">
-        <h1 className="app-title">Task Management</h1>
-        <p className="app-subtitle">
-          Organize your work efficiently with our modern task management system
-        </p>
-      </header>
+    <div className={styles.app}>
+      {/* Navigation Bar */}
+      <nav className={styles.navbar}>
+        <div className={styles.navContainer}>
+          <div className={styles.navBrand}>
+            <img 
+              src="/logo.png" 
+              alt="Cash Flow Positive Logo" 
+              className={styles.navLogo}
+            />
+            <div className={styles.navCompanyInfo}>
+              <h2 className={styles.navCompanyName}>Cash Flow Positive</h2>
+              <p className={styles.navCompanyTagline}>Investment & Real Estate Solutions</p>
+            </div>
+          </div>
+          <div className={styles.navTitle}>
+            <h1 className={styles.navAppTitle}>📋 Task Management System</h1>
+          </div>
+        </div>
+      </nav>
 
       {/* Main Content */}
-      <main className="app-main">
-        <div className="app-container">
-          {/* Task Creation Form */}
-          <TaskForm />
-          
-          {/* Task List Display */}
-          <TaskList tasks={tasks as Task[]} isLoading={isLoading} />
+      <main className={styles.main}>
+        <div className={styles.container}>
+          <div className={styles.contentGrid}>
+            {/* Left Side - Task Form */}
+            <div className={styles.formSection}>
+              <TaskForm />
+            </div>
+            
+            {/* Right Side - Task List */}
+            <div className={styles.listSection}>
+              <TaskList tasks={tasks} />
+            </div>
+          </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="app-footer">
-        <p>Built with React, TypeScript, and modern web technologies</p>
+      
+      <footer className={styles.footer}>
+        <div className={styles.footerContent}>
+          <p className={styles.signature}>
+            ✨ Developed with passion by{' '}
+            <a 
+              href="https://www.marwaniwael.me" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className={styles.portfolioLink}
+            >
+              Marwani Wael
+            </a>
+          </p>
+          <p className={styles.techStack}>
+            Built with React, TypeScript, Express.js & Modern Web Technologies
+          </p>
+        </div>
       </footer>
 
       {/* Global Error Notification */}

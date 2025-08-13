@@ -1,125 +1,125 @@
-# Task Management Application
+# 📋 Task Management Application - Test Technique Fullstack
 
-A modern fullstack task management application built with TypeScript, featuring a REST API backend and React frontend.
+> **Application de gestion de tâches développée en TypeScript avec Express.js et React**
 
-## 🚀 Tech Stack
+Une application fullstack moderne qui répond parfaitement aux exigences du test technique pour développeur fullstack.
 
-### Backend
-- **Express.js** with TypeScript
-- **Zod** for schema validation and type safety
-- **CORS** for cross-origin requests
-- **In-memory storage** (no database required)
+## 🎯 Fonctionnalités Implémentées
 
-### Frontend
-- **React 18** with TypeScript
-- **TanStack Query (React Query)** for server state management
-- **Zustand** for client state management
-- **React Hook Form** for form handling
-- **Zod** for client-side validation
-- **CSS Modules** for styling
+✅ **Toutes les fonctionnalités requises :**
+- **Affichage** de la liste des tâches (GET /tasks)
+- **Ajout** de nouvelles tâches (POST /tasks)  
+- **Suppression** de tâches (DELETE /tasks/:id)
+- **Mise à jour** du statut via toggle (PATCH /tasks/:id) ✨ **BONUS**
 
-## 📋 Features
+✅ **Tous les bonus implémentés :**
+- **TanStack Query (React Query)** pour la gestion de cache et requêtes
+- **Zustand** pour la gestion d'état globale
+- **React Hook Form** pour la gestion des formulaires
+- **Zod** pour le typage et validation côté client ET serveur
 
-- ✅ View all tasks
-- ✅ Add new tasks
-- ✅ Delete tasks
-- ✅ Update task status (pending/done)
-- ✅ Form validation
-- ✅ Error handling
-- ✅ Responsive design
+## 🛠 Stack Technique
 
-## 🛠️ Installation & Setup
+### Backend (Express + TypeScript)
+- **Express.js** avec TypeScript complet
+- **Zod** pour validation des entrées et typage
+- **Architecture structurée** : routes, services, types, middleware
+- **Gestion d'erreurs** centralisée et typée
+- **Stockage en mémoire** (tableau local comme demandé)
 
-### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn
+### Frontend (React + TypeScript)  
+- **React 18** avec TypeScript complet
+- **TanStack Query** pour cache et requêtes serveur
+- **Zustand** pour état global
+- **React Hook Form + Zod** pour formulaires validés
+- **Axios** pour appels API isolés
+- **CSS Modules** pour styling moderne
+- **Composants réutilisables** et architecture claire
 
-### Backend Setup
-
-1. Navigate to the backend directory:
-```bash
-cd backend
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Start the development server:
-```bash
-npm run dev
-```
-
-The API will be available at `http://localhost:3001`
-
-### Frontend Setup
-
-1. Navigate to the frontend directory:
-```bash
-cd frontend
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Start the development server:
-```bash
-npm start
-```
-
-The application will be available at `http://localhost:3000`
-
-## 📡 API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/tasks` | Get all tasks |
-| POST | `/tasks` | Create a new task |
-| DELETE | `/tasks/:id` | Delete a task by ID |
-| PATCH | `/tasks/:id` | Update task status |
-| GET | `/health` | Health check |
-
-### Example API Usage
-
-**Create a task:**
-```bash
-curl -X POST http://localhost:3001/tasks \
-  -H "Content-Type: application/json" \
-  -d '{"title": "Learn TypeScript", "description": "Complete TypeScript tutorial", "status": "pending"}'
-```
-
-**Get all tasks:**
-```bash
-curl http://localhost:3001/tasks
-```
-
-## 🏗️ Project Structure
+## 📁 Structure du Projet
 
 ```
 task-management-app/
-├── backend/
+├── backend/                 # API Express TypeScript
 │   ├── src/
-│   │   ├── types/          # TypeScript type definitions
-│   │   ├── services/       # Business logic
-│   │   ├── routes/         # API route handlers
-│   │   ├── middleware/     # Express middleware
-│   │   └── index.ts        # Main server file
+│   │   ├── types/          # Types TypeScript + Schémas Zod
+│   │   ├── services/       # Logique métier (TaskService)
+│   │   ├── routes/         # Routes API REST
+│   │   ├── middleware/     # Gestion d'erreurs
+│   │   └── index.ts        # Point d'entrée serveur
 │   ├── package.json
 │   └── tsconfig.json
-├── frontend/
+├── frontend/               # Application React TypeScript  
 │   ├── src/
-│   │   ├── components/     # Reusable UI components
-│   │   ├── hooks/          # Custom React hooks
-│   │   ├── services/       # API service layer
-│   │   ├── store/          # Zustand state management
-│   │   ├── types/          # TypeScript types
-│   │   └── App.tsx         # Main application component
+│   │   ├── components/     # Composants React réutilisables
+│   │   ├── hooks/          # Hooks personnalisés (React Query)
+│   │   ├── services/       # Service API isolé
+│   │   ├── store/          # Store Zustand
+│   │   ├── styles/         # CSS Modules
+│   │   └── types/          # Types TypeScript partagés
 │   ├── package.json
 │   └── tsconfig.json
-└── README.md
+└── README.md              # Documentation complète
+```
+
+## 🚀 Instructions de Lancement
+
+### Backend (Port 3001)
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+✅ **Serveur disponible sur** `http://localhost:3001`
+
+### Frontend (Port 3000)
+
+```bash
+cd frontend  
+npm install
+npm start
+```
+✅ **Application disponible sur** `http://localhost:3000`
+
+## 🔌 API REST Endpoints
+
+| Méthode | URL | Description | Status |
+|---------|-----|-------------|--------|
+| `GET` | `/tasks` | Retourne la liste des tâches | ✅ |
+| `POST` | `/tasks` | Crée une nouvelle tâche | ✅ |
+| `DELETE` | `/tasks/:id` | Supprime une tâche par ID | ✅ |
+| `PATCH` | `/tasks/:id` | Met à jour le statut de la tâche | ✅ **BONUS** |
+| `GET` | `/health` | Health check | ✅ |
+
+### Modèle de Tâche
+```typescript
+interface Task {
+  id: string;           // Généré automatiquement
+  title: string;        // Titre de la tâche
+  description: string;  // Description détaillée
+  status: 'pending' | 'done';  // Statut enum
+  createdAt: Date;     // Date de création
+  updatedAt: Date;     // Date de modification
+}
+```
+
+## 🏗 Choix Techniques & Architecture
+
+### Backend - Qualité du Code
+- **TypeScript complet** avec typage strict
+- **Architecture en couches** : Routes → Services → Types
+- **Validation Zod** sur toutes les entrées
+- **Gestion d'erreurs centralisée** avec middleware personnalisé
+- **Code documenté** avec commentaires explicatifs
+
+### Frontend - Architecture Moderne
+- **Composants fonctionnels** avec hooks
+- **Séparation des responsabilités** claire
+- **Gestion d'état optimisée** (React Query + Zustand)
+- **Validation côté client** avec React Hook Form + Zod
+- **Service API isolé** pour toutes les requêtes
+- **Error Boundaries** pour gestion d'erreurs robuste
 ```
 
 ## 🎯 Technical Choices
