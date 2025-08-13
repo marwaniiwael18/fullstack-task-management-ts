@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateTaskInput, CreateTaskSchema } from '../types/task';
 import { useCreateTask } from '../hooks/useTasks';
+import { CelebrationAnimation } from './CelebrationAnimation';
 import styles from '../styles/TaskForm.module.css';
 
 /**
@@ -16,9 +17,11 @@ import styles from '../styles/TaskForm.module.css';
  * - Loading state during submission
  * - Automatic form reset after successful submission
  * - Improved UX with better visual feedback
+ * - Celebration animation on successful task creation
  */
 export const TaskForm: React.FC = () => {
   const createTaskMutation = useCreateTask();
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const {
     register,
@@ -48,10 +51,18 @@ export const TaskForm: React.FC = () => {
     try {
       await createTaskMutation.mutateAsync(data);
       reset(); // Reset form after successful submission
+      setShowCelebration(true); // Show celebration animation
     } catch (error) {
-      // Error handling is managed by the mutation hook and global error state
+      // Error is handled by the mutation hook
       console.error('Failed to create task:', error);
     }
+  };
+
+  /**
+   * Handle celebration animation completion
+   */
+  const handleCelebrationComplete = () => {
+    setShowCelebration(false);
   };
 
   return (
@@ -141,6 +152,12 @@ export const TaskForm: React.FC = () => {
           )}
         </button>
       </form>
+
+      {/* Celebration Animation */}
+      <CelebrationAnimation
+        isVisible={showCelebration}
+        onComplete={handleCelebrationComplete}
+      />
     </div>
   );
 };

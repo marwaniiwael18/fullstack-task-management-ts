@@ -85,6 +85,8 @@ export const useDeleteTask = () => {
   return useMutation({
     mutationFn: TaskService.deleteTask,
     onMutate: async (taskId: string) => {
+      console.log('Deleting task with ID:', taskId);
+      
       // Clear any previous errors
       clearError();
       
@@ -93,24 +95,30 @@ export const useDeleteTask = () => {
 
       // Snapshot the previous value
       const previousTasks = queryClient.getQueryData<Task[]>(QUERY_KEYS.TASKS);
+      console.log('Previous tasks:', previousTasks);
 
       // Optimistically remove the task from cache
       if (previousTasks) {
         const updatedTasks = previousTasks.filter(task => task.id !== taskId);
+        console.log('Updated tasks after delete:', updatedTasks);
         queryClient.setQueryData<Task[]>(QUERY_KEYS.TASKS, updatedTasks);
       }
 
       return { previousTasks };
     },
     onError: (error: Error, taskId, context) => {
+      console.error('Delete task error:', error);
+      
       // Rollback on error
       if (context?.previousTasks) {
         queryClient.setQueryData(QUERY_KEYS.TASKS, context.previousTasks);
       }
       setError(error.message);
     },
-    onSuccess: () => {
-      // Invalidate and refetch to ensure consistency
+    onSuccess: (data, taskId) => {
+      console.log('Task deleted successfully:', taskId);
+      
+      // Refetch to ensure consistency
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.TASKS });
     },
   });

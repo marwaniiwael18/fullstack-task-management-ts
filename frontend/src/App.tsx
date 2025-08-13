@@ -78,20 +78,55 @@ const AppContent: React.FC = () => {
       
       <footer className={styles.footer}>
         <div className={styles.footerContent}>
-          <p className={styles.signature}>
-            ✨ Developed with passion by{' '}
-            <a 
-              href="https://www.marwaniwael.me" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className={styles.portfolioLink}
-            >
-              Marwani Wael
-            </a>
-          </p>
-          <p className={styles.techStack}>
-            Built with React, TypeScript, Express.js & Modern Web Technologies
-          </p>
+          <div className={styles.footerLeft}>
+            <p className={styles.signature}>
+              ✨ Developed by <span className={styles.developerName}>Marwani Wael</span>
+            </p>
+            <p className={styles.techStack}>
+              Built with React, TypeScript, Express.js & Modern Web Technologies
+            </p>
+          </div>
+          
+          <div className={styles.footerCenter}>
+            <div className={styles.contactLinks}>
+              <a 
+                href="https://www.marwaniwael.me" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={styles.contactLink}
+              >
+                🌐 Portfolio
+              </a>
+              <a 
+                href="https://www.linkedin.com/in/wael-marwani/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={styles.contactLink}
+              >
+                💼 LinkedIn
+              </a>
+              <a 
+                href="https://github.com/marwaniiwael18/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={styles.contactLink}
+              >
+                💻 GitHub
+              </a>
+              <a 
+                href="mailto:wael.marwani@esprit.tn" 
+                className={styles.contactLink}
+              >
+                📧 Email
+              </a>
+            </div>
+          </div>
+          
+          <div className={styles.footerRight}>
+            <p className={styles.copyright}>
+              © 2025 Marwani Wael
+            </p>
+          </div>
         </div>
       </footer>
 

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Task } from '../types/task';
 import { useDeleteTask, useUpdateTaskStatus } from '../hooks/useTasks';
+import { ConfirmationModal } from './ConfirmationModal';
 import styles from '../styles/TaskList.module.css';
 
 /**
@@ -17,25 +18,49 @@ interface TaskListProps {
 export const TaskList: React.FC<TaskListProps> = ({ tasks = [], isLoading }) => {
   const deleteTaskMutation = useDeleteTask();
   const updateTaskMutation = useUpdateTaskStatus();
+  
+  // State for confirmation modal
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    taskId: string;
+    taskTitle: string;
+  }>({
+    isOpen: false,
+    taskId: '',
+    taskTitle: ''
+  });
 
   /**
-   * Handle task deletion with confirmation
+   * Handle task deletion with confirmation modal
    * @param taskId - ID of task to delete
    * @param taskTitle - Title of task for confirmation message
    */
-  const handleDeleteTask = async (taskId: string, taskTitle: string) => {
-    const confirmed = window.confirm(
-      `Are you sure you want to delete "${taskTitle}"? This action cannot be undone.`
-    );
-    
-    if (confirmed) {
-      try {
-        await deleteTaskMutation.mutateAsync(taskId);
-      } catch (error) {
-        // Error is handled by the mutation hook
-        console.error('Failed to delete task:', error);
-      }
+  const handleDeleteTask = (taskId: string, taskTitle: string) => {
+    setConfirmModal({
+      isOpen: true,
+      taskId,
+      taskTitle
+    });
+  };
+
+  /**
+   * Confirm task deletion
+   */
+  const confirmDelete = async () => {
+    try {
+      await deleteTaskMutation.mutateAsync(confirmModal.taskId);
+      setConfirmModal({ isOpen: false, taskId: '', taskTitle: '' });
+    } catch (error) {
+      // Error is handled by the mutation hook
+      console.error('Failed to delete task:', error);
     }
+  };
+
+  /**
+   * Cancel task deletion
+   */
+  const cancelDelete = () => {
+    setConfirmModal({ isOpen: false, taskId: '', taskTitle: '' });
   };
 
   /**
@@ -128,6 +153,18 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks = [], isLoading }) => 
           </div>
         ))}
       </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={confirmModal.isOpen}
+        title="🗑️ Delete Task"
+        message={`Are you sure you want to delete "${confirmModal.taskTitle}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+        isLoading={deleteTaskMutation.isPending}
+      />
     </div>
   );
 };
