@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { Task } from '../types/task';
 
 /**
  * Zustand store for client-side state management
