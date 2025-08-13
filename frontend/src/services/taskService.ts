@@ -7,7 +7,7 @@ import { Task, CreateTaskInput, UpdateTaskInput, ApiResponse } from '../types/ta
  * Uses axios for HTTP client with proper error handling
  */
 
-// Create axios instance with base configuration
+// Create axios instance with base configuration - FIXED API URL
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
   ? 'https://task-management-backend-wael.onrender.com'
   : 'http://localhost:3001';
