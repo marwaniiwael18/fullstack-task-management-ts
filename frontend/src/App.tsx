@@ -43,15 +43,22 @@ const AppContent: React.FC = () => {
       <nav className={styles.navbar}>
         <div className={styles.navContainer}>
           <div className={styles.navBrand}>
-            <img 
-              src="/logo.png" 
-              alt="Cash Flow Positive Logo" 
-              className={styles.navLogo}
-            />
-            <div className={styles.navCompanyInfo}>
-              <h2 className={styles.navCompanyName}>Cash Flow Positive</h2>
-              <p className={styles.navCompanyTagline}>Investment & Real Estate Solutions</p>
-            </div>
+            <a 
+              href="https://cashflowpositif.com/?utm_source=web&utm_medium=homepage&utm_campaign=organique"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.logoLink}
+            >
+              <img 
+                src="/logo.png" 
+                alt="Cash Flow Positive Logo" 
+                className={styles.navLogo}
+              />
+              <div className={styles.navCompanyInfo}>
+                <h2 className={styles.navCompanyName}>Cash Flow Positive</h2>
+                <p className={styles.navCompanyTagline}>Investment & Real Estate Consulting</p>
+              </div>
+            </a>
           </div>
           <div className={styles.navTitle}>
             <h1 className={styles.navAppTitle}>📋 Task Management System</h1>

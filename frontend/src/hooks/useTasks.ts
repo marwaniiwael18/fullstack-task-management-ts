@@ -40,35 +40,56 @@ export const useCreateTask = () => {
   return useMutation({
     mutationFn: TaskService.createTask,
     onMutate: async (newTask: CreateTaskInput) => {
+      console.log('🚀 Creating task optimistically:', newTask);
+      
       // Clear any previous errors
       clearError();
       
-      // Cancel outgoing refetches
+      // Cancel outgoing refetches to prevent race conditions
       await queryClient.cancelQueries({ queryKey: QUERY_KEYS.TASKS });
 
-      // Snapshot the previous value
-      const previousTasks = queryClient.getQueryData<Task[]>(QUERY_KEYS.TASKS);
+      // Snapshot the previous value for rollback
+      const previousTasks = queryClient.getQueryData<Task[]>(QUERY_KEYS.TASKS) || [];
 
-      // Optimistically update the cache
-      if (previousTasks) {
-        const optimisticTask: Task = {
-          id: `temp-${Date.now()}`, // Temporary ID
-          ...newTask,
-        };
-        queryClient.setQueryData<Task[]>(QUERY_KEYS.TASKS, [...previousTasks, optimisticTask]);
-      }
+      // Create optimistic task with temporary ID
+      const optimisticTask: Task = {
+        id: `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`, // Unique temporary ID
+        title: newTask.title,
+        description: newTask.description,
+        status: newTask.status,
+      };
 
-      return { previousTasks };
+      // Immediately update the cache for real-time UI
+      const updatedTasks = [...previousTasks, optimisticTask];
+      queryClient.setQueryData<Task[]>(QUERY_KEYS.TASKS, updatedTasks);
+      
+      console.log('✨ Task added optimistically to UI:', optimisticTask);
+      console.log('📋 Updated task list:', updatedTasks);
+
+      return { previousTasks, optimisticTask };
     },
     onError: (error: Error, newTask, context) => {
-      // Rollback on error
+      console.error('❌ Task creation failed, rolling back:', error);
+      
+      // Rollback to previous state on error
       if (context?.previousTasks) {
         queryClient.setQueryData(QUERY_KEYS.TASKS, context.previousTasks);
       }
-      setError(error.message);
+      setError(`Failed to create task: ${error.message}`);
     },
-    onSuccess: () => {
-      // Invalidate and refetch tasks to get the real data
+    onSuccess: (realTask: Task, newTask, context) => {
+      console.log('✅ Task created successfully on server:', realTask);
+      
+      // Replace optimistic task with real task from server
+      const currentTasks = queryClient.getQueryData<Task[]>(QUERY_KEYS.TASKS) || [];
+      const updatedTasks = currentTasks.map(task => 
+        task.id === context?.optimisticTask?.id ? realTask : task
+      );
+      
+      queryClient.setQueryData<Task[]>(QUERY_KEYS.TASKS, updatedTasks);
+      console.log('🔄 Replaced optimistic task with real task');
+      
+      // Invalidate to ensure data consistency
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.TASKS });
     },
   });

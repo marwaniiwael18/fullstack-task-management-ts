@@ -44,6 +44,25 @@ body {
   gap: 1rem;
 }
 
+.navBrand.logoLink {
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  padding: 0.5rem;
+}
+
+.logoLink:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .navLogo {
   width: 80px;
   height: 80px;
@@ -227,8 +246,30 @@ body {
     gap: 1.5rem;
   }
   
-  .app-footer {
-    padding: 1.5rem 0;
+  .footerContent {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+  
+  .footerLeft,
+  .footerCenter,
+  .footerRight {
+    flex: none;
+  }
+  
+  .footerRight {
+    text-align: center;
+  }
+  
+  .contactLinks {
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .contactLink {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
   }
 }
 
