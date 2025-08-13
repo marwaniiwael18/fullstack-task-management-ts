@@ -9,8 +9,8 @@ import { Task, CreateTaskInput, UpdateTaskInput, ApiResponse } from '../types/ta
 
 // Create axios instance with base configuration
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://task-management-api-wael.onrender.com/api'
-  : 'http://localhost:3001/api';
+  ? 'https://task-management-backend-wael.onrender.com'
+  : 'http://localhost:3001';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
