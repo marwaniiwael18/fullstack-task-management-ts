@@ -5,6 +5,7 @@ import { TaskList } from './components/TaskList';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ErrorNotification } from './components/ErrorNotification';
 import { useTasks } from './hooks/useTasks';
+import { Task } from './types/task';
 import './styles/App.css';
 
 /**
@@ -53,7 +54,7 @@ const AppContent: React.FC = () => {
           <TaskForm />
           
           {/* Task List Display */}
-          <TaskList tasks={tasks} isLoading={isLoading} />
+          <TaskList tasks={tasks as Task[]} isLoading={isLoading} />
         </div>
       </main>
 

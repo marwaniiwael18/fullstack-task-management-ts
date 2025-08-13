@@ -1,3 +1,4 @@
+import React from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { TaskService } from '../services/taskService';
 import { Task, CreateTaskInput, UpdateTaskInput } from '../types/task';
@@ -21,17 +22,23 @@ export const QUERY_KEYS = {
 export const useTasks = () => {
   const { setError } = useTaskStore();
 
-  return useQuery({
+  const query = useQuery({
     queryKey: QUERY_KEYS.TASKS,
     queryFn: TaskService.getAllTasks,
-    onError: (error: Error) => {
-      setError(error.message);
-    },
     // Refetch data every 30 seconds in the background
     refetchInterval: 30000,
     // Keep data fresh for 5 minutes
     staleTime: 5 * 60 * 1000,
   });
+
+  // Handle errors using useEffect since onError is deprecated in v5
+  React.useEffect(() => {
+    if (query.error) {
+      setError(query.error.message);
+    }
+  }, [query.error, setError]);
+
+  return query;
 };
 
 /**
