@@ -97,3 +97,6 @@ temp/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Local drafts - not for version control
+_drafts_local/
