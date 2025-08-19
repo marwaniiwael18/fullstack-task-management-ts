@@ -5,6 +5,7 @@ import { TaskList } from './components/TaskList';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { ErrorNotification } from './components/ErrorNotification';
 import { useTasks } from './hooks/useTasks';
+import Logo from './assets/Logo.png';
 
 import styles from './styles/App.module.css';
 
@@ -50,7 +51,7 @@ const AppContent: React.FC = () => {
               className={styles.logoLink}
             >
               <img 
-                src="/logo.png" 
+                src={Logo} 
                 alt="Cash Flow Positive Logo" 
                 className={styles.navLogo}
               />
